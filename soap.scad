@@ -5,7 +5,7 @@
 // Overall dimensions
 length         = 100;  // mm - tray length (long axis = X)
 width          =  70;  // mm - tray width  (short axis = Y)
-height         =  32;  // mm - total height (inner soap cavity = 20 mm)
+height         =  25;  // mm - total height (inner soap cavity = 20 mm)
 wall_thickness =   3;  // mm
 
 // Double bottom
@@ -13,6 +13,7 @@ outer_base     =  2;   // mm - solid bottom plate
 channel_height =  8;   // mm - water collection channel
 inner_base     =  2;   // mm - perforated inner floor
 total_base     = outer_base + channel_height + inner_base;  // = 12 mm
+slope_height   =  3;   // mm - ramp rise from drain side to far side (< channel_height)
 
 // Drain opening on the long side (y = 0 face, centered along length)
 drain_w        = 90;   // mm - opening width along X
@@ -25,7 +26,7 @@ hole_rows      =   3;  // rows along the width
 // Ribs (keep soap elevated above inner floor)
 rib_count      =   5;
 rib_height     =   5;  // mm above inner floor
-rib_width      =   3;  // mm
+rib_width      =   2;  // mm
 
 inner_length = length - wall_thickness * 2;
 inner_width  = width  - wall_thickness * 2;
@@ -66,6 +67,20 @@ module drainage_holes() {
     }
 }
 
+// Wedge ramp on the channel floor: zero height at the drain side (y = wall_thickness),
+// rising to slope_height at the far side (y = width - wall_thickness).
+// Water that falls through the inner base is guided toward the y = 0 drain opening.
+module channel_ramp() {
+    hull() {
+        // Far edge (high side)
+        translate([wall_thickness, width - wall_thickness - 0.01, outer_base])
+            cube([inner_length, 0.01, slope_height]);
+        // Drain edge (low side) — infinitesimally thin
+        translate([wall_thickness, wall_thickness, outer_base])
+            cube([inner_length, 0.01, 0.01]);
+    }
+}
+
 module ribs() {
     spacing = inner_length / (rib_count + 1);
     for (i = [1 : rib_count]) {
@@ -81,6 +96,7 @@ module ribs() {
 difference() {
     union() {
         tray();
+        channel_ramp();
         ribs();
     }
     drainage_holes();
