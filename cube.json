@@ -1,0 +1,17 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "New set 1": {
+            "hole_diameter": "10",
+            "outer_size": "20",
+            "wall_thickness": "2"
+        },
+        "New set 2": {
+            "hole_diameter": "10",
+            "outer_size": "20",
+            "square_hole_size": "5",
+            "triangle_side": "8",
+            "wall_thickness": "2"
+        }
+    }
+}
