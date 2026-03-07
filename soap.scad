@@ -1,20 +1,30 @@
-// Soap Holder
-// A tray with drainage holes and raised ribs to hold a bar of soap
+// Soap Holder with Double Bottom
+// Water drains through the inner base into a sealed channel,
+// then flows out through an opening on the long side.
 
-// Dimensions
-length         = 100;  // mm - tray length
-width          =  70;  // mm - tray width
-height         =  20;  // mm - tray height
+// Overall dimensions
+length         = 100;  // mm - tray length (long axis = X)
+width          =  70;  // mm - tray width  (short axis = Y)
+height         =  32;  // mm - total height (inner soap cavity = 20 mm)
 wall_thickness =   3;  // mm
-base_thickness =   3;  // mm
 
-// Drainage holes
+// Double bottom
+outer_base     =  2;   // mm - solid bottom plate
+channel_height =  8;   // mm - water collection channel
+inner_base     =  2;   // mm - perforated inner floor
+total_base     = outer_base + channel_height + inner_base;  // = 12 mm
+
+// Drain opening on the long side (y = 0 face, centered along length)
+drain_w        = 90;   // mm - opening width along X
+drain_h        = channel_height;  // mm - full channel height
+
+// Drainage holes (through inner_base only)
 hole_diameter  =   6;  // mm
 hole_rows      =   3;  // rows along the width
 
-// Ribs (keep soap elevated for drainage)
+// Ribs (keep soap elevated above inner floor)
 rib_count      =   5;
-rib_height     =   5;  // mm above base interior
+rib_height     =   5;  // mm above inner floor
 rib_width      =   3;  // mm
 
 inner_length = length - wall_thickness * 2;
@@ -25,16 +35,22 @@ module tray() {
         // Outer shell
         cube([length, width, height]);
 
-        // Inner cavity
-        translate([wall_thickness, wall_thickness, base_thickness])
+        // Water channel cavity (between outer_base and inner_base)
+        translate([wall_thickness, wall_thickness, outer_base])
+            cube([inner_length, inner_width, channel_height]);
+
+        // Soap cavity (above inner_base)
+        translate([wall_thickness, wall_thickness, total_base])
             cube([inner_length, inner_width, height]);
+
+        // Drain opening through the long side wall (y = 0)
+        translate([(length - drain_w) / 2, -1, outer_base])
+            cube([drain_w, wall_thickness + 2, drain_h]);
     }
 }
 
 module drainage_holes() {
-    // One column of holes per gap between ribs (and between end ribs and walls)
-    // rib_spacing divides inner_length into (rib_count + 1) equal gaps
-    // Each hole column is centered in its gap: offset = (col - 0.5) * rib_spacing
+    // One column per gap between ribs; centered in each gap
     rib_spacing = inner_length / (rib_count + 1);
     y_spacing   = inner_width  / (hole_rows + 1);
 
@@ -43,9 +59,9 @@ module drainage_holes() {
             translate([
                 wall_thickness + (col - 0.5) * rib_spacing,
                 wall_thickness + row * y_spacing,
-                -1
+                total_base - inner_base - 1
             ])
-                cylinder(h = base_thickness + 2, r = hole_diameter / 2, $fn = 32);
+                cylinder(h = inner_base + 2, r = hole_diameter / 2, $fn = 32);
         }
     }
 }
@@ -56,7 +72,7 @@ module ribs() {
         translate([
             wall_thickness + i * spacing - rib_width / 2,
             wall_thickness,
-            base_thickness
+            total_base
         ])
             cube([rib_width, inner_width, rib_height]);
     }
