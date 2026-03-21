@@ -1,41 +1,66 @@
-// Soap Holder with Double Bottom
-// Water drains through the inner base into a sealed channel,
-// then flows out through an opening on the long side.
+// =============================================================================
+// Soap Holder with Bottle Compartment
+// =============================================================================
+// A two-section shower caddy:
+//   - Front section: soap tray with a perforated double bottom for drainage
+//   - Back section:  open compartment for small shampoo bottles
+// Water drains through the inner base into a sealed channel with a sloped
+// ramp, then flows out through a spout on the front side (y = 0).
+// =============================================================================
 
-// Overall dimensions
-length         = 100;  // mm - tray length (long axis = X)
-width          =  80;  // mm - tray width  (short axis = Y)
-height         =  18;  // mm - total height (inner soap cavity = 20 mm)
-wall_thickness =   3;  // mm
+// --- Overall dimensions (soap tray) -----------------------------------------
+// The soap tray sits along the X axis (length) and Y axis (width).
+// The bottle holder is attached to the back (high-Y side).
+length         = 100;  // mm - tray length along X
+width          =  80;  // mm - tray width along Y
+height         =  18;  // mm - total tray wall height
+wall_thickness =   3;  // mm - thickness of all outer walls
 
-// Double bottom
-outer_base     =  2;   // mm - solid bottom plate
-channel_height =  4;   // mm - water collection channel
-inner_base     =  2;   // mm - perforated inner floor
-total_base     = outer_base + channel_height + inner_base;  // = 12 mm
-slope_height   =  3;   // mm - ramp rise from drain side to far side (< channel_height)
+// --- Double bottom (tray module) ---------------------------------------------
+// Three layers from bottom up: solid outer base, water channel, perforated inner base.
+// Water falls through the inner base holes into the channel below.
+outer_base     =  2;   // mm - solid bottom plate (waterproof floor)
+channel_height =  4;   // mm - height of the water collection channel between bases
+inner_base     =  2;   // mm - perforated floor the soap sits on (via ribs)
+total_base     = outer_base + channel_height + inner_base;  // mm - combined base height
 
-// Drain opening on the long side (y = 0 face, centered along length)
-drain_w        = 70;   // mm - opening width along X
-drain_h        = channel_height;  // mm - full channel height
-drain_spout    = 5;   // mm - spout extension away from the holder
+// --- Channel ramp (channel_ramp module) --------------------------------------
+// A wedge inside the channel that slopes from the back (bottle holder side)
+// down to the front (drain side), guiding water toward the drain opening.
+// Must be less than channel_height to leave room for water flow.
+slope_height   =  3;   // mm - total rise from drain side to far end of bottle holder
 
-// Drainage holes (through inner_base only)
-hole_diameter  =   6;  // mm
-hole_rows      =   4;  // rows along the width
+// --- Drain opening & spout (tray + drain_spout modules) ----------------------
+// The drain is a rectangular opening in the front wall (y = 0), centered along X.
+// The spout extends outward from this opening so water drips away from the holder.
+drain_w        = 70;   // mm - width of the drain opening along X
+drain_h        = channel_height;  // mm - height of the drain opening (full channel)
+drain_spout    =  5;   // mm - how far the spout extends away from the front wall
 
-// Ribs (keep soap elevated above inner floor)
-rib_count      =   5;
-rib_height     =   5;  // mm above inner floor
-rib_width      =   2;  // mm
+// --- Drainage holes (drainage_holes module) ----------------------------------
+// Grid of circular holes through the inner base that let water fall into the channel.
+// Holes are evenly distributed between ribs.
+hole_diameter  =   6;  // mm - diameter of each drainage hole
+hole_rows      =   4;  // number of hole rows along the Y axis
 
-// Bottle holder (opposite side from drain, along Y)
-bottle_depth   =  50;  // mm (~2 inches) - depth of the bottle compartment
-bottle_height  =  30;  // mm - tall enough for small shampoo bottles
-channel_opening=  90;  // mm - width of the opening between bottle holder and drainage
+// --- Ribs (ribs module) ------------------------------------------------------
+// Raised bars on the inner base that keep the soap elevated above the perforated
+// floor, improving airflow and drainage underneath the soap.
+rib_count      =   5;  // number of ribs along the X axis
+rib_height     =   5;  // mm - how high ribs rise above the inner base
+rib_width      =   2;  // mm - thickness of each rib
 
-inner_length = length - wall_thickness * 2;
-inner_width  = width  - wall_thickness * 2;
+// --- Bottle holder (bottle_holder module) ------------------------------------
+// An open compartment attached to the back of the soap tray (high-Y side)
+// for holding small shampoo bottles. Shares the back wall with the tray.
+// Its floor sits on the same sloped ramp so water drains toward the front.
+bottle_depth   =  50;  // mm - compartment depth along Y (~2 inches)
+bottle_height  =  30;  // mm - wall height (tall enough for travel-size bottles)
+channel_opening=  90;  // mm - width of the opening between bottle holder and tray channel
+
+// --- Computed values ---------------------------------------------------------
+inner_length = length - wall_thickness * 2;  // mm - usable interior length
+inner_width  = width  - wall_thickness * 2;  // mm - usable interior width
 
 module tray() {
     difference() {
