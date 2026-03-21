@@ -32,6 +32,40 @@
             "slope_height": "3",
             "wall_thickness": "3",
             "width": "70"
+        },
+        "New set 3": {
+            "channel_height": "8",
+            "drain_w": "90",
+            "height": "25",
+            "hole_diameter": "6",
+            "hole_rows": "3",
+            "inner_base": "2",
+            "length": "100",
+            "outer_base": "2",
+            "rib_count": "5",
+            "rib_height": "5",
+            "rib_width": "2",
+            "slope_height": "3",
+            "wall_thickness": "3",
+            "width": "70"
+        },
+        "New set 4": {
+            "bottle_depth": "51",
+            "bottle_height": "40",
+            "channel_height": "8",
+            "drain_w": "90",
+            "height": "25",
+            "hole_diameter": "6",
+            "hole_rows": "4",
+            "inner_base": "2",
+            "length": "100",
+            "outer_base": "2",
+            "rib_count": "5",
+            "rib_height": "5",
+            "rib_width": "2",
+            "slope_height": "3",
+            "wall_thickness": "3",
+            "width": "80"
         }
     }
 }
