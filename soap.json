@@ -53,6 +53,7 @@
             "bottle_depth": "51",
             "bottle_height": "40",
             "channel_height": "8",
+            "channel_opening": "90",
             "drain_w": "90",
             "height": "25",
             "hole_diameter": "6",

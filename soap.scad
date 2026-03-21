@@ -31,7 +31,7 @@ rib_width      =   2;  // mm
 // Bottle holder (opposite side from drain, along Y)
 bottle_depth   =  51;  // mm (~2 inches) - depth of the bottle compartment
 bottle_height  =  60;  // mm - tall enough for small shampoo bottles
-channel_opening=  60;  // mm - width of the opening between bottle holder and drainage
+channel_opening=  90;  // mm - width of the opening between bottle holder and drainage
 
 inner_length = length - wall_thickness * 2;
 inner_width  = width  - wall_thickness * 2;
