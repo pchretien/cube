@@ -16,8 +16,9 @@ total_base     = outer_base + channel_height + inner_base;  // = 12 mm
 slope_height   =  3;   // mm - ramp rise from drain side to far side (< channel_height)
 
 // Drain opening on the long side (y = 0 face, centered along length)
-drain_w        = 90;   // mm - opening width along X
+drain_w        = 70;   // mm - opening width along X
 drain_h        = channel_height;  // mm - full channel height
+drain_spout    = 5;   // mm - spout extension away from the holder
 
 // Drainage holes (through inner_base only)
 hole_diameter  =   6;  // mm
@@ -86,8 +87,8 @@ module channel_ramp() {
         // Far edge (high side) — at the back of the bottle holder
         translate([wall_thickness, far_y - 0.01, outer_base])
             cube([inner_length, 0.01, slope_height]);
-        // Drain edge (low side) — infinitesimally thin
-        translate([wall_thickness, wall_thickness, outer_base])
+        // Drain edge (low side) — extends to outer wall face (y = 0) to meet the spout
+        translate([wall_thickness, 0, outer_base])
             cube([inner_length, 0.01, 0.01]);
     }
 }
@@ -105,6 +106,46 @@ module bottle_holder() {
             // Opening through shared wall so water flows into the drainage channel
             translate([(length - channel_opening) / 2, -1, outer_base])
                 cube([channel_opening, wall_thickness + 2, channel_height]);
+        }
+}
+
+// Spout extending outward from the drain opening so water flows away
+module drain_spout() {
+    spout_x = (length - drain_w) / 2;
+
+    // Sloped floor — from outer_base at the holder down to wall_thickness at the outer edge
+    translate([spout_x, -drain_spout, 0])
+        hull() {
+            // Inner edge (at holder wall)
+            translate([0, drain_spout - 0.01, 0])
+                cube([drain_w, 0.01, outer_base]);
+            // Outer edge — ends at wall_thickness height
+            translate([0, 0, 0])
+                cube([drain_w, 0.01, wall_thickness]);
+        }
+
+    // Left side wall — straight vertical
+    translate([spout_x, -drain_spout, 0])
+        cube([wall_thickness, drain_spout, outer_base + drain_h]);
+
+    // Right side wall — straight vertical
+    translate([spout_x + drain_w - wall_thickness, -drain_spout, 0])
+        cube([wall_thickness, drain_spout, outer_base + drain_h]);
+
+    // Left ramp — triangular wedge to guide water inward
+    translate([spout_x + wall_thickness, -drain_spout, 0])
+        hull() {
+            cube([0.01, drain_spout, outer_base + drain_h]);
+            cube([drain_h, drain_spout, 0.01]);
+        }
+
+    // Right ramp — triangular wedge to guide water inward
+    translate([spout_x + drain_w - wall_thickness, -drain_spout, 0])
+        hull() {
+            translate([-0.01, 0, 0])
+                cube([0.01, drain_spout, outer_base + drain_h]);
+            translate([-drain_h, 0, 0])
+                cube([drain_h, drain_spout, 0.01]);
         }
 }
 
@@ -126,6 +167,7 @@ difference() {
         channel_ramp();
         ribs();
         bottle_holder();
+        drain_spout();
     }
     drainage_holes();
 }
