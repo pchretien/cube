@@ -5,12 +5,12 @@
 // Overall dimensions
 length         = 100;  // mm - tray length (long axis = X)
 width          =  80;  // mm - tray width  (short axis = Y)
-height         =  25;  // mm - total height (inner soap cavity = 20 mm)
+height         =  18;  // mm - total height (inner soap cavity = 20 mm)
 wall_thickness =   3;  // mm
 
 // Double bottom
 outer_base     =  2;   // mm - solid bottom plate
-channel_height =  8;   // mm - water collection channel
+channel_height =  4;   // mm - water collection channel
 inner_base     =  2;   // mm - perforated inner floor
 total_base     = outer_base + channel_height + inner_base;  // = 12 mm
 slope_height   =  3;   // mm - ramp rise from drain side to far side (< channel_height)
@@ -29,8 +29,8 @@ rib_height     =   5;  // mm above inner floor
 rib_width      =   2;  // mm
 
 // Bottle holder (opposite side from drain, along Y)
-bottle_depth   =  51;  // mm (~2 inches) - depth of the bottle compartment
-bottle_height  =  60;  // mm - tall enough for small shampoo bottles
+bottle_depth   =  50;  // mm (~2 inches) - depth of the bottle compartment
+bottle_height  =  30;  // mm - tall enough for small shampoo bottles
 channel_opening=  90;  // mm - width of the opening between bottle holder and drainage
 
 inner_length = length - wall_thickness * 2;
